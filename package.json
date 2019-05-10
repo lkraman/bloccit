@@ -17,6 +17,7 @@
     "node": "10.x.x"
   },
   "dependencies": {
+    "@hapi/cryptiles": "^4.2.0",
     "dotenv": "^5.0.0",
     "express": "^4.16.2",
     "npm-check-updates": "^3.1.9"
