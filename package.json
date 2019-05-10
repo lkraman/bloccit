@@ -2,6 +2,8 @@
   "name": "bloccit",
   "version": "1.0.0",
   "description": "A Reddit-like application for users to discuss and share content",
+  "engines": {
+    "node": "10.15.1",
   "main": "src/server.js",
   "scripts": {
     "test": "set NODE_ENV=test&& jasmine",
@@ -15,6 +17,7 @@
   },
   "dependencies": {
     "dotenv": "^5.0.0",
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "npm-check-updates": "^3.1.9"
   }
 }
