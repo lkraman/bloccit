@@ -5,7 +5,10 @@
   "main": "src/server.js",
   "scripts": {
     "test": "set NODE_ENV=test&& jasmine",
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "engines": {
+      "node": "10.x.x"
+    },
   },
   "author": "Laura Kraman",
   "license": "ISC",
@@ -13,9 +16,7 @@
     "jasmine": "^3.0.0",
     "request": "^2.83.0"
   },
-  "engines": {
-    "node": "10.x.x"
-  },
+
   "dependencies": {
     "@hapi/cryptiles": "^4.2.0",
     "dotenv": "^5.0.0",
