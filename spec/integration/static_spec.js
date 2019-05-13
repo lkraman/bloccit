@@ -1,16 +1,16 @@
-const request = require("request");
-const server = require("../../src/server");
-const base = "http://localhost:3000/";
-//const aboutUs = "http://localhost:3000/about";
+const request = require('request');
+const server = require('../../src/server');
+const base = 'http://localhost:3000/';
+const about = 'http://localhost:3000/about';
 
-describe("routes : static", () => {
+describe('routes : static', () => {
 
-  describe("GET /", () => {
+  describe('GET /', () => {
 
-    it("should return status code 200 and have 'Welcome to Bloccit' in the body of the response", (done) => {
+    it('should return status code 200 and have 'Welcome to Bloccit' in the body of the response', (done) => {
       request.get(base, (err, res, body) => {
         expect(res.statusCode).toBe(200);
-        expect(body).toContain("Welcome to Bloccit");
+        expect(body).toContain('Welcome to Bloccit');
 
         done();
       });
@@ -18,15 +18,15 @@ describe("routes : static", () => {
   });
 
 
-  // describe("GET /about", () => {
-  //
-  //   it("should return status code 200 and have '/About Us/' in the body of the response", () => {
-  //     request.get(base, (err, res, body) => {
-  //       expect(res.statusCode).toBe(200);
-  //       expect(body).toContain("About Us");
-  //
-  //       done();
-  //     });
-  //   });
-  // });
+  describe('GET /about', () => {
+
+    it('should return status code 200 and have '/About Us/' in the body of the response', (done) => {
+      request.get(about, (err, res, body) => {
+        expect(res.statusCode).toBe(200);
+        expect(body).toContain('About Us');
+
+        done();
+      });
+    });
+  });
 });

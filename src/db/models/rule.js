@@ -6,8 +6,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Rule.associate = function(models) {
     Rule.belongsTo(models.Topic, {
-      foreignKey: "topicId",
-      onDelete: "CASCADE",
+      foreignKey: 'topicId',
+      onDelete: 'CASCADE',
     });
   };
   return Rule;
