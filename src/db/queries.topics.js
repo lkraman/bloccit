@@ -3,7 +3,7 @@ const Topic = require('./models').Topic;
 module.exports = {
 
   getAllTopics(callback) {
-    return Topic.all()
+    return Topic.findAll()
 
       .then((topics) => {
         callback(null, topics);
@@ -14,7 +14,7 @@ module.exports = {
   },
 
   getTopic(id, callback) {
-    return Topic.findById(id)
+    return Topic.findByPk(id)
       .then((topic) => {
         callback(null, topic);
       })
@@ -38,9 +38,7 @@ module.exports = {
 
   deleteTopic(id, callback) {
     return Topic.destroy({
-        where: {
-          id
-        }
+        where: {id}
       })
       .then((topic) => {
         callback(null, topic);
@@ -51,7 +49,7 @@ module.exports = {
   },
 
   updateTopic(id, updatedTopic, callback){
-    return Topic.findById(id)
+    return Topic.findByPk(id)
     .then((topic) => {
       if(!topic){
         return callback('Topic not found');
