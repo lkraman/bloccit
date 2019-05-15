@@ -13,11 +13,13 @@
   "author": "Laura Kraman",
   "license": "ISC",
   "devDependencies": {
-    "jasmine": "^3.0.0",
+    "faker": "^4.1.0",
+    "jasmine": "^3.4.0",
     "request": "^2.83.0"
   },
   "dependencies": {
     "@hapi/cryptiles": "^4.2.0",
+    "body-parser": "^1.19.0",
     "dotenv": "^5.0.0",
     "ejs": "^2.6.1",
     "express": "^4.16.2",
