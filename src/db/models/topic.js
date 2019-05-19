@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     description: DataTypes.STRING
   }, {});
-  
+
   Topic.associate = function(models) {
 
     Topic.hasMany(models.Banner, {
@@ -20,9 +20,9 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Topic.hasMany(models.Post, {
-        foreignKey: "topicId",
-        as: "posts"
-      });
-   };
-   return Topic;
- };
+      foreignKey: "topicId",
+      as: "posts"
+    });
+  };
+  return Topic;
+};
