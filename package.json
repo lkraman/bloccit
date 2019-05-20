@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@hapi/cryptiles": "^4.2.0",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "dotenv": "^5.0.1",
     "ejs": "^2.6.1",
@@ -27,6 +28,8 @@
     "express-session": "^1.16.1",
     "express-validator": "^5.3.1",
     "npm-check-updates": "^3.1.9",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
     "pg": "^7.11.0",
     "pg-hstore": "^2.3.2",
     "sequelize": "^5.8.6",
