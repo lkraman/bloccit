@@ -37,6 +37,17 @@ describe('routes : posts', () => {
         });
     });
   });
+  describe("GET /topics/:topicId/posts/new", () => {
+
+       it("should render a new post form", (done) => {
+         request.get(`${base}/${this.topic.id}/posts/new`, (err, res, body) => {
+           expect(err).toBeNull();
+           expect(body).toContain("New Post");
+           done();
+         });
+       });
+
+     });
 
   describe("POST /topics/:topicId/posts/create", () => {
 
@@ -68,17 +79,35 @@ describe('routes : posts', () => {
      });
 
   });
-  describe("GET /topics/:topicId/posts/new", () => {
 
-       it("should render a new post form", (done) => {
-         request.get(`${base}/${this.topic.id}/posts/new`, (err, res, body) => {
-           expect(err).toBeNull();
-           expect(body).toContain("New Post");
+  it("should not create a new post that fails validations", (done) => {
+     const options = {
+       url: `${base}/${this.topic.id}/posts/create`,
+       form: {
+
+//#1
+         title: "a",
+         body: "b"
+       }
+     };
+
+     request.post(options,
+       (err, res, body) => {
+
+//#2
+         Post.findOne({where: {title: "a"}})
+         .then((post) => {
+             expect(post).toBeNull();
+             done();
+         })
+         .catch((err) => {
+           console.log(err);
            done();
          });
-       });
+       }
+     );
+   });
 
-     });
 
 
   describe('GET /topics/:topicId/posts/:id', () => {
@@ -144,7 +173,8 @@ describe('routes : posts', () => {
       const options = {
         url: `${base}/${this.topic.id}/posts/${this.post.id}/update`,
         form: {
-          title: 'Snowman Building Competition'
+          title: 'Snowman Building Competition',
+          body: "I love watching them melt slowly."
         }
       };
       request.post(options,
