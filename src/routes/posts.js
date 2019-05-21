@@ -18,4 +18,5 @@ router.post("/topics/:topicId/posts/:id/destroy", postController.destroy);
 router.post("/topics/:topicId/posts/:id/update", validation.validatePosts, postController.update);
 
 
+
 module.exports = router;
