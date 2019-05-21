@@ -1,30 +1,40 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-    const Post = sequelize.define('Post', {
+  const Post = sequelize.define('Post', {
 
-        title: {
-          type: DataTypes.STRING,
-          allowNull: false
-        },
-        body: {
-          type: DataTypes.STRING,
-          allowNull: false
-        },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    body: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
 
-        topicId: {
-          type: DataTypes.INTEGER,
-          allowNull: false
-        }
-        }, {});
-        Post.associate = function(models) {
-        // associations can be defined here
+    topicId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
 
-        Post.belongsTo(models.Topic, {
-          foreignKey: "topicId",
-          onDelete: "CASCADE"
-        });
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }
+  }, {});
+  Post.associate = function(models) {
+    // associations can be defined here
 
-      };
-      return Post;
+    Post.belongsTo(models.Topic, {
+      foreignKey: "topicId",
+      onDelete: "CASCADE"
+    });
 
-    };
+    Post.belongsTo(models.User, {
+    foreignKey: "userId",
+    onDelete: "CASCADE"
+  });
+
+  };
+  return Post;
+
+};
