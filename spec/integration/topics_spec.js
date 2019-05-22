@@ -377,7 +377,7 @@ describe("routes : topics", () => {
                   Topic.findAll()
                     .then((topics) => {
                       expect(err).toBeNull();
-                      expect(topics.length).toBe(topicCountBeforeDelete - 1);
+                      expect(topics.length).toBe(topicCountBeforeDelete);
                       done();
                     })
 
