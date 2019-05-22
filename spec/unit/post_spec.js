@@ -55,12 +55,11 @@ describe("Post", () => {
           userId: this.user.id
         })
         .then((post) => {
-
           expect(post.title).toBe("Pros of Cryosleep during the long journey");
           expect(post.body).toBe("1. Not having to answer the 'are we there yet?' question.");
+          expect(post.topicId).toBe(this.topic.id);
           expect(post.userId).toBe(this.user.id);
           done();
-
         })
         .catch((err) => {
           console.log(err);
@@ -73,19 +72,14 @@ describe("Post", () => {
           title: "Pros of Cryosleep during the long journey"
         })
         .then((post) => {
-
           done();
-
         })
         .catch((err) => {
-
           expect(err.message).toContain("Post.body cannot be null");
           expect(err.message).toContain("Post.topicId cannot be null");
           done();
-
         })
     });
-
   });
 
   describe("#setTopic()", () => {
@@ -97,19 +91,14 @@ describe("Post", () => {
           description: "1. The Wi-Fi is terrible"
         })
         .then((newTopic) => {
-
           expect(this.post.topicId).toBe(this.topic.id);
-
           this.post.setTopic(newTopic)
             .then((post) => {
-
               expect(post.topicId).toBe(newTopic.id);
               done();
-
             });
         })
     });
-
   });
 
   describe("#getTopic()", () => {
@@ -121,9 +110,7 @@ describe("Post", () => {
           expect(associatedTopic.title).toBe("Expeditions to Alpha Centauri");
           done();
         });
-
     });
-
   });
 
   describe("#setUser()", () => {
@@ -143,11 +130,9 @@ describe("Post", () => {
 
               expect(this.post.userId).toBe(newUser.id);
               done();
-
             });
         })
     });
-
   });
 
   describe("#getUser()", () => {
@@ -159,8 +144,6 @@ describe("Post", () => {
           expect(associatedUser.email).toBe("starman@tesla.com");
           done();
         });
-
     });
-
   });
 });
