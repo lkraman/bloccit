@@ -236,40 +236,9 @@ describe("routes : topics", () => {
           expect(topicCountBeforeDelete).toBe(1);
           request.post(`${base}${this.topic.id}/destroy`, (err, res, body) => {
             Topic.findAll()
-
-              .then((topics) => {
-
-                const topicCountBeforeDelete = topics.length;
-
-                expect(topicCountBeforeDelete).toBe(1);
-
-                request.post(`${base}${this.topic.id}/destroy`, (err, res, body) => {
-                  Topic.findAll()
-                    .then((topics) => {
-                      expect(err).toBeNull();
-                      expect(topics.length).toBe(topicCountBeforeDelete);
-                      done();
-                    })
-
-                });
-              });
-          });
-        });
-
-
-        describe("GET /topics/:id/edit", () => {
-
-          it("should not render a view with an edit topic form", (done) => {
-
-            request.get(`${base}${this.topic.id}/edit`, (err, res, body) => {
-              expect(err).toBeNull();
-              expect(body).not.toContain("Edit Topic");
-              expect(body).toContain("JavaScript Frameworks"); // confirm redirect to topic show
-
             .then((topics) => {
               // confirm that no topics were deleted
               expect(topics.length).toBe(topicCountBeforeDelete);
-
               done();
             })
           });
