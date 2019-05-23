@@ -75,7 +75,7 @@ describe("routes : posts", () => {
   });
   // End User Context
 
-  // Member User Context
+  // context for member
   describe("member user performing CRUD actions for Post", () => {
 
     beforeEach((done) => {
@@ -123,64 +123,60 @@ describe("routes : posts", () => {
 
     describe("POST /topics/:topicId/posts/create", () => {
 
-      it("should create a new post and redirect", (done) => {
-        const options = {
-          url: `${base}/${this.topic.id}/posts/create`,
-          form: {
-            title: "Watching snow melt",
-            body: "Without a doubt my favoriting things to do besides watching paint dry!"
-          }
-        };
-        request.post(options,
-          (err, res, body) => {
+   it("should create a new post and redirect", (done) => {
+     const options = {
+       url: `${base}/${this.topic.id}/posts/create`,
+       form: {
+         title: "Watching snow melt",
+         body: "Without a doubt my favoriting things to do besides watching paint dry!"
+       }
+     };
+     request.post(options,
+       (err, res, body) => {
 
-            Post.findOne({
-                where: {
-                  title: "Watching snow melt",
-                  body: "Without a doubt my favoriting things to do besides watching paint dry!"
-                }
-              })
-              .then((post) => {
-                expect(post).not.toBeNull();
-                expect(post.title).toBe("Watching snow melt");
-                expect(post.body).toBe("Without a doubt my favoriting things to do besides watching paint dry!");
-                expect(post.topicId).not.toBeNull();
-                done();
-              })
-              .catch((err) => {
-                console.log(err);
-                done();
-              });
-          })
-      });
+       Post.findOne({
+         where: {
+           title: "Watching snow melt",
+           body: "Without a doubt my favoriting things to do besides watching paint dry!"
+         }
+       })
+       .then((post) => {
+         expect(post).not.toBeNull();
+         expect(post.title).toBe("Watching snow melt");
+         expect(post.body).toBe("Without a doubt my favoriting things to do besides watching paint dry!");
+         expect(post.topicId).not.toBeNull();
+         done();
+       })
+       .catch((err) => {
+         console.log(err);
+         done();
+       });
+     })
+   });
 
-      it("should not create a new post that fails validations", (done) => {
-        const options = {
-          url: `${base}/${this.topic.id}/posts/create`,
-          form: {
-            title: "a",
-            body: "b"
-          }
-        };
+   it("should not create a new post that fails validations", (done) => {
+     const options = {
+       url: `${base}/${this.topic.id}/posts/create`,
+       form: {
+         title: "a",
+         body: "b"
+       }
+     };
 
-        request.post(options,
-          (err, res, body) => {
-            Post.findOne({
-                where: {
-                  title: "a"
-                }
-              })
-              .then((post) => {
-                expect(post).toBeNull();
-                done();
-              })
-              .catch((err) => {
-                console.log(err);
-                done();
-              });
-          });
-      });
-    });
+     request.post(options,
+       (err, res, body) => {
+         Post.findOne({where: {title: "a"}})
+         .then((post) => {
+             expect(post).toBeNull();
+             done();
+         })
+         .catch((err) => {
+           console.log(err);
+           done();
+         });
+       });
+     });
+  });
 
     describe("POST /topics/:topicId/posts/:id/destroy", () => {
 
@@ -351,19 +347,22 @@ describe("routes : posts", () => {
 
     describe("POST /topics/:topicId/posts/:id/destroy", () => {
 
-      it("should delete the post with the associated ID", (done) => {
-        expect(this.post.id).toBe(1);
-
-        request.post(`${base}/${this.topic.id}/posts/${this.post.id}/destroy`, (err, res, body) => {
-          Post.findByPk(1)
-            .then((post) => {
-              expect(err).toBeNull();
-              expect(post).toBeNull();
-              done();
-            })
-        });
-      });
-    });
+   it("should not delete the post with the associated ID", (done) => {
+     Post.findAll()
+     .then((posts) => {
+       const postCountBeforeDelete = posts.length;
+       expect(postCountBeforeDelete).toBe(1);
+       request.post(`${base}${this.topic.id}/posts/${this.post.id}/destroy`, (err, res, body) => {
+         Post.findAll()
+         .then((posts) => {
+           // confirm that no posts were deleted
+           expect(posts.length).toBe(postCountBeforeDelete);
+           done();
+         })
+       });
+     })
+   });
+  });
 
     describe("GET /topics/:topicId/posts/:id/edit", () => {
 

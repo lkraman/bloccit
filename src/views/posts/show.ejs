@@ -15,6 +15,7 @@
 
     <h1>
       <%= post.title %>
+<<<<<<< HEAD
       <p><%= post.body %></p>
 
        <% if (currentUser && (currentUser.isAdmin() || currentUser.id == post.userId)) { %>
@@ -44,6 +45,17 @@
       <% }) %>
       <% } %>
     </section>
+=======
+    </h1>
+    <a href="/topics/<%= post.topicId %>/posts/<%= post.id %>/edit" class="btn btn-warning">Edit</a>
+    <form style="display:initial" action="/topics/<%= post.topicId %>/posts/<%= post.id %>/destroy" method="post">
+      <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+    <p>
+      <%= post.body %>
+    </p>
+    <a href="/topics/<%= post.topicId %>" class="btn btn-info">Back to Topic</a>
+>>>>>>> Authorization-assignment
   </main>
 
   <% include ../static/partials/baseScripts.ejs %>

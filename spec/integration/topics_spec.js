@@ -11,6 +11,7 @@ describe("routes : topics", () => {
 
   beforeEach((done) => {
     this.topic;
+
     sequelize.sync({ force: true }).then(() => {  // clear database
       Topic.create({
         title: "JS Frameworks",
@@ -163,14 +164,26 @@ describe("routes : topics", () => {
   describe("member user performing CRUD actions for Topic", () => {
 
     beforeEach((done) => {
-      request.get({
-        url: "http://localhost:3000/auth/fake",
-        form: {
-          role: "member"
-        }
+      User.create({
+        email: "member@example.com",
+        password: "123456",
+        role: "member"
+      })
+      .then((user)=>{
+        request.get({
+          url: "http://localhost:3000/auth/fake",
+          form: {
+            role: user.role, // mock authenticate as member user
+            userId: user.id,
+            email: user.email
+          }
+        },
+          (err,res,body)=>{
+            done();
+          });
       });
-      done();
     });
+
 
     describe("GET /topics", () => {
       it("should respond with all topics", (done) => {

@@ -10,7 +10,7 @@ module.exports = {
       },
       body: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       postId: {
         type: Sequelize.INTEGER,
