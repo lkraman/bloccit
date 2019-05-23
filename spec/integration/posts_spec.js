@@ -242,7 +242,7 @@ describe("routes : posts", () => {
   // End Member Context
 
   // Admin Context
-  describe("admin user performaing CRUD actions for Posts", () => {
+  describe("admin user performing CRUD actions for Posts", () => {
 
     beforeEach((done) => {
       User.create({
@@ -384,7 +384,7 @@ describe("routes : posts", () => {
           url: `${base}/${this.topic.id}/posts/${this.post.id}/update`,
           form: {
             title: "Snowball Fighting",
-            body: "It really hurst to get hit with a snowball.",
+            body: "It really hurts to get hit with a snowball.",
           }
         }, (err, res, body) => {
           expect(err).toBeNull();
