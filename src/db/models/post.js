@@ -22,19 +22,21 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {});
   Post.associate = function(models) {
-    // associations can be defined here
 
     Post.belongsTo(models.Topic, {
-      foreignKey: "topicId",
-      onDelete: "CASCADE"
+      foreignKey: 'topicId',
+      onDelete: 'CASCADE'
     });
 
     Post.belongsTo(models.User, {
-    foreignKey: "userId",
-    onDelete: "CASCADE"
-  });
+      foreignKey: 'userId',
+      onDelete: 'CASCADE'
+    });
 
   };
+  Post.prototype.isOwner = function() {
+    return this.userId === this.foreignKey;
+  }
   return Post;
 
 };

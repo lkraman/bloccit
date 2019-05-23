@@ -9,6 +9,7 @@ module.exports = {
   },
 
   create(req, res, next) {
+  //  console.log('REQUEST BODY- ', req.body)
     let newPost = {
       title: req.body.title,
       body: req.body.body,

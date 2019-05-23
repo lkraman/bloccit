@@ -47,7 +47,7 @@ module.exports = {
   deleteTopic(req, callback) {
 
     // #1
-    return Topic.findbyPk(req.params.id)
+    return Topic.findByPk(req.params.id)
       .then((topic) => {
 
         // #2
@@ -74,7 +74,7 @@ module.exports = {
   updateTopic(req, updatedTopic, callback){
 
 // #1
-     return Topic.findbyPk(req.params.id)
+     return Topic.findByPk(req.params.id)
      .then((topic) => {
 
 // #2
