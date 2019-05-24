@@ -4,6 +4,7 @@ const Authorizer = require("../policies/topic");
 module.exports = {
 
   index(req, res, next) {
+
     topicQueries.getAllTopics((err, topics) => {
 
       if (err) {
@@ -19,8 +20,10 @@ module.exports = {
        const authorized = new Authorizer(req.user).new();
 
        if(authorized) {
+         console.log('USER new IS AUTH')
          res.render("topics/new");
        } else {
+         console.log('USER new IS NOT AUTH')
          req.flash("notice", "You are not authorized to do that.");
          res.redirect("/topics");
        }
@@ -54,6 +57,7 @@ module.exports = {
     topicQueries.getTopic(req.params.id, (err, topic) => {
 
       if (err || topic == null) {
+        console.log('USER show IS NOT SHOWING TOPICS')
         res.redirect(404, '/');
       } else {
         res.render('topics/show', {topic});
