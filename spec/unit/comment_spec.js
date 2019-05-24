@@ -112,7 +112,7 @@ describe("Comment", () => {
 
   });
 
-// #6: We test the `setUser` method which assigns a User object to the comment it was called on
+//We test the `setUser` method which assigns a User object to the comment it was called on
   describe("#setUser()", () => {
 
     it("should associate a comment and a user together", (done) => {
@@ -137,7 +137,7 @@ describe("Comment", () => {
 
   });
 
-// #7: We test the `getUser` method which should return the User associated with the comment called on
+// We test the `getUser` method which should return the User associated with the comment called on
   describe("#getUser()", () => {
 
     it("should return the associated user", (done) => {
@@ -179,7 +179,7 @@ describe("Comment", () => {
 
   });
 
-// #9: We test `getPost` which should return the Post associated with the comment called on
+// We test `getPost` which should return the Post associated with the comment called on
   describe("#getPost()", () => {
 
     it("should return the associated post", (done) => {

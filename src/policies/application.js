@@ -6,7 +6,7 @@ module.exports = class ApplicationPolicy {
     this.record = record;
   }
 
- // #2
+
   _isOwner() {
     return this.record && (this.record.userId == this.user.id);
   }

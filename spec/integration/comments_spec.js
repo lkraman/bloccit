@@ -265,7 +265,7 @@ describe("signed in but non owner user performing CRUD actions for Comment", () 
            })
         });
       });
-    }); //end test  suites for signed-in user or member but not owner of commen
+    }); //end test  suites for signed-in user or member but not owner of comment
 
     //test suites for admin user
     describe("admin user performing CRUD actions for Comment", () => {
