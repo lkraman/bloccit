@@ -34,14 +34,29 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Post.hasMany(models.Comment, {
-    foreignKey: "postId",
-    as: "comments"
-  });
+      foreignKey: "postId",
+      as: "comments"
+    });
+
+    Post.hasMany(models.Vote, {
+      foreignKey: "postId",
+      as: "votes"
+    });
 
   };
   Post.prototype.isOwner = function() {
     return this.userId === this.foreignKey;
   }
-  return Post;
+
+  Post.prototype.getPoints = function(){
+
+     if(this.votes.length === 0) return 0
+
+     return this.votes
+       .map((v) => { return v.value })
+       .reduce((prev, next) => { return prev + next });
+   };
+
+   return Post;
 
 };
