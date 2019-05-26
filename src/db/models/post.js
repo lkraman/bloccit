@@ -10,11 +10,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-
     topicId: {
       type: DataTypes.INTEGER,
       allowNull: false
-
     },
     userId: {
       type: DataTypes.INTEGER,
@@ -34,28 +32,30 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Post.hasMany(models.Comment, {
-      foreignKey: "postId",
-      as: "comments"
-    });
-
-    Post.hasMany(models.Favorite, {
-      foreignKey: "postId",
-      as: "favorites"
-    });
-
-    Post.afterCreate((post, callback) => {
-      return models.Favorite.create({
-        userId: post.userId,
-        postId: post.id
+        foreignKey: "postId",
+        as: "comments"
       });
-    });
-
-    Post.hasMany(models.Vote, {
-      foreignKey: "postId",
-      as: "votes"
-    });
-
-  };
+      Post.hasMany(models.Favorite, {
+        foreignKey: "postId",
+        as: "favorites"
+      });
+      Post.hasMany(models.Vote, {
+        foreignKey: "postId",
+        as: "votes"
+      });
+      Post.afterCreate((post, callback) => {
+        return models.Favorite.create({
+          userId: post.userId,
+          postId: post.id
+        });
+      });
+      Post.prototype.getPoints = function(){
+       if(this.votes.length === 0) return 0
+       return this.votes
+       .map(v => v.value)
+       .reduce((prev, next) =>  prev + next);
+     };
+    };
   Post.prototype.isOwner = function() {
     return this.userId === this.foreignKey;
   };

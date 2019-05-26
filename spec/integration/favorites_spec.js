@@ -171,7 +171,7 @@ describe("routes : favorites", () => {
                 (err, res, body) => {
                   this.post.getFavorites()
                     .then((favorites) => {
-                      expect(favorites.length).toBe(favCountBeforeDelete);//should have -1 have Delete. Look into this. Unable to pass tests with integer.
+                      expect(favorites.length).toBe(favCountBeforeDelete-1)
                       done();
                     });
                 }

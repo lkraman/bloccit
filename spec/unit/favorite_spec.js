@@ -56,10 +56,10 @@ describe("Favorite", () => {
            done();
          });
        })//what is the reason for two .catch's?
-       // .catch((err) => {
-       //   console.log(err);
-       //   done();
-       // });
+       .catch((err) => {
+         console.log(err);
+         done();
+       });
      });
    });
  });
@@ -86,7 +86,7 @@ describe("Favorite", () => {
        });
      });
 
- 
+
      it("should not create a favorite without assigned post or user", (done) => {
        Favorite.create({
          userId: null
