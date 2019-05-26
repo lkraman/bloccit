@@ -18,7 +18,7 @@ describe("routes : topics", () => {
         description: "There is a lot of them"
       })
       .then((res) => {
-        this.topic = res;  // store resulting topic in context
+        this.topic = res;
         done();
       })
       .catch((err) => {
