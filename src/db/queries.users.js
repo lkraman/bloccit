@@ -1,10 +1,12 @@
 // #1
 const User = require("./models").User;
 const bcrypt = require("bcryptjs");
+const Post = require("./models").Post;
+const Comment = require("./models").Comment;
 
 module.exports = {
-// #2
-  createUser(newUser, callback){
+  // #2
+  createUser(newUser, callback) {
 
 
     const salt = bcrypt.genSaltSync();
@@ -12,15 +14,49 @@ module.exports = {
 
 
     return User.create({
-      email: newUser.email,
-      password: hashedPassword
-    })
-    .then((user) => {
-      callback(null, user);
-    })
-    .catch((err) => {
-      callback(err);
-    })
-  }
+        email: newUser.email,
+        password: hashedPassword
+      })
+      .then((user) => {
+        callback(null, user);
+      })
+      .catch((err) => {
+        callback(err);
+      })
+  },
 
+  getUser(id, callback) {
+
+    let result = {};
+    User.findByPk(id)
+      .then((user) => {
+
+        if (!user) {
+          callback(404);
+        } else {
+
+          result["user"] = user;
+
+          Post.scope({
+              method: ["lastFiveFor", id]
+            }).findAll()
+            .then((posts) => {
+
+              result["posts"] = posts;
+
+              Comment.scope({
+                  method: ["lastFiveFor", id]
+                }).findAll()
+                .then((comments) => {
+
+                  result["comments"] = comments;
+                  callback(null, result);
+                })
+                .catch((err) => {
+                  callback(err);
+                })
+            })
+        }
+      })
+  }
 }
