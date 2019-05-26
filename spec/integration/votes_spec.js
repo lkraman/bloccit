@@ -18,7 +18,6 @@ describe("routes : votes", () => {
     this.post;
     this.vote;
 
- // #3
     sequelize.sync({force: true}).then((res) => {
       User.create({
         email: "starman@tesla.com",
