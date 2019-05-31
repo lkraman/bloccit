@@ -111,15 +111,32 @@ describe("routes : posts", () => {
     });
 
     describe("GET /topics/:topicId/posts/new", () => {
-
       it("should render a new post form", (done) => {
-        request.get(`${base}/${this.topic.id}/posts/new`, (err, res, body) => {
-          expect(err).toBeNull();
-          expect(body).toContain("New Post");
-          done();
+          const options = {
+            url: `${base}/${this.topic.id}/posts/new`,
+            form: {
+              body: "New Post"
+            }
+          };
+          request.post(options,
+            (err, res, body) => {
+  
+              Post.findOne({
+                  where: {
+                    body: "New Post"
+                  }
+                })
+                .then((post) => {
+                  expect(post.body).toBe("New Post");
+                  expect(post.topicId).not.toBeNull();
+                  done();
+                })
+                .catch((err) => {
+                  console.log(err);
+                  done();
+                });
+            })
         });
-      });
-    });
 
     describe("POST /topics/:topicId/posts/create", () => {
 
@@ -141,7 +158,7 @@ describe("routes : posts", () => {
                 }
               })
               .then((post) => {
-                expect(post).not.toBeNull();
+
                 expect(post.title).toBe("Watching snow melt");
                 expect(post.body).toBe("Without a doubt my favoriting things to do besides watching paint dry!");
                 expect(post.topicId).not.toBeNull();
@@ -308,7 +325,7 @@ describe("routes : posts", () => {
                 }
               })
               .then((post) => {
-                expect(post).not.toBeNull();
+             
                 expect(post.title).toBe("Watching snow melt");
                 expect(post.body).toBe("Without a doubt my favoriting things to do besides watching paint dry!");
                 expect(post.topicId).not.toBeNull();
@@ -350,17 +367,15 @@ describe("routes : posts", () => {
     });
 
     describe("POST /topics/:topicId/posts/:id/destroy", () => {
-
-      it("should delete the post with the associated ID", (done) => {
+      it("should not delete the post with the associated ID", (done) => {
         expect(this.post.id).toBe(1);
-
         request.post(`${base}/${this.topic.id}/posts/${this.post.id}/destroy`, (err, res, body) => {
           Post.findByPk(1)
-            .then((post) => {
-              expect(err).toBeNull();
-              expect(post).toBeNull();
-              done();
-            })
+          .then((post) => {
+            expect(err).toBeNull();
+            expect(post).not.toBeNull();
+            done();
+          });
         });
       });
     });
@@ -389,9 +404,7 @@ describe("routes : posts", () => {
         }, (err, res, body) => {
           expect(err).toBeNull();
           Post.findOne({
-              where: {
-                id: 1
-              }
+            where: {id: this.post.id}
             })
             .then((post) => {
               expect(post.title).toBe("Snowball Fighting");
@@ -402,4 +415,5 @@ describe("routes : posts", () => {
     });
   });
 
+});
 });

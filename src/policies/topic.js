@@ -3,7 +3,7 @@ const ApplicationPolicy = require("./application");
 
 module.exports = class TopicPolicy extends ApplicationPolicy {
 
-// #2
+
  new() {
    return this._isAdmin();
  }
@@ -12,7 +12,7 @@ module.exports = class TopicPolicy extends ApplicationPolicy {
    return this.new();
  }
 
-// #3
+
  edit() {
    return this._isAdmin();
  }

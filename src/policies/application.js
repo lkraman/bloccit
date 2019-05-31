@@ -22,7 +22,7 @@ module.exports = class ApplicationPolicy {
 
 
    new() {
-     return !!this.user;
+    return this.user != null;
    }
 
   create() {
@@ -33,7 +33,7 @@ module.exports = class ApplicationPolicy {
     return true;
   }
 
- // #4
+
   edit() {
     return this.new() &&
       this.record && (this._isOwner() || this._isAdmin());
