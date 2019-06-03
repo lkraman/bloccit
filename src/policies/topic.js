@@ -1,4 +1,5 @@
-const ApplicationPolicy = require("./application");
+// #1
+const ApplicationPolicy = require("./application").default;
 
 module.exports = class TopicPolicy extends ApplicationPolicy {
 
