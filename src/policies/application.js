@@ -1,4 +1,4 @@
-module.exports = class ApplicationPolicy {
+export default class ApplicationPolicy {
 
  // #1
   constructor(user, record) {
@@ -15,8 +15,12 @@ module.exports = class ApplicationPolicy {
     return this.user && this.user.role == "admin";
   }
 
-  _isMember() {
-    return this.user && this.user.role == "member";
+ //  _isMember() {
+ //   return this.user && this.user.role == "member";
+ // }
+ // #3
+  new() {
+    return !!this.user;
   }
 
 
