@@ -2,7 +2,6 @@ const topicQueries = require('../db/queries.topics.js');
 const Authorizer = require("../policies/topic");
 
 module.exports = {
-
   index(req, res, next) {
 
     topicQueries.getAllTopics((err, topics) => {
@@ -10,99 +9,105 @@ module.exports = {
       if (err) {
         res.redirect(500, 'static/index');
       } else {
-        res.render('topics/index', {topics});
+        res.render('topics/index', {
+          topics
+        });
       }
     })
   },
+  new(req, res, next) {
+    // #2
+    const authorized = new Authorizer(req.user).new();
 
-  new(req, res, next){
+    if (authorized) {
+      res.render("topics/new");
+    } else {
+      req.flash("notice", "You are not authorized to do that.");
+      res.redirect("/topics");
+    }
+  },
+  create(req, res, next) {
 
-       const authorized = new Authorizer(req.user).new();
+    // #1
+    const authorized = new Authorizer(req.user).create();
 
-       if(authorized) {
-         console.log('USER new IS AUTH')
-         res.render("topics/new");
-       } else {
-         console.log('USER new IS NOT AUTH')
-         req.flash("notice", "You are not authorized to do that.");
-         res.redirect("/topics");
-       }
-     },
+    // #2
+    if (authorized) {
+      let newTopic = {
+        title: req.body.title,
+        description: req.body.description
+      };
+      topicQueries.addTopic(newTopic, (err, topic) => {
+        if (err) {
+          res.redirect(500, "topics/new");
+        } else {
+          res.redirect(303, `/topics/${topic.id}`);
+        }
+      });
+    } else {
 
-     create(req, res, next){
-
-       const authorized = new Authorizer(req.user).create();
-
-       if(authorized) {
-         let newTopic = {
-           title: req.body.title,
-           description: req.body.description
-         };
-         topicQueries.addTopic(newTopic, (err, topic) => {
-           if(err){
-             res.redirect(500, "topics/new");
-           } else {
-             res.redirect(303, `/topics/${topic.id}`);
-           }
-         });
-       } else {
-
-         req.flash("notice", "You are not authorized to do that.");
-         res.redirect("/topics");
-       }
-     },
-
+      // #3
+      req.flash("notice", "You are not authorized to do that.");
+      res.redirect("/topics");
+    }
+  },
   show(req, res, next) {
-
     topicQueries.getTopic(req.params.id, (err, topic) => {
-
       if (err || topic == null) {
-        console.log('USER show IS NOT SHOWING TOPICS')
-        res.redirect(404, '/');
+        res.redirect(404, "/");
       } else {
-        res.render('topics/show', {topic});
+        res.render("topics/show", {
+          topic
+        });
       }
     });
   },
+  destroy(req, res, next) {
 
-  destroy(req, res, next){
-       topicQueries.deleteTopic(req, (err, topic) => {
-         if(err){
-           res.redirect(err, `/topics/${req.params.id}`)
-         } else {
-           res.redirect(303, "/topics")
-         }
-       });
-     },
+    // #1
+    topicQueries.deleteTopic(req, (err, topic) => {
+      if (err) {
+        console.log(err);
+        res.redirect(
+          typeof err === "number" ? err : 500,
+          `/topics/${req.params.id}`);
+      } else {
+        res.redirect(303, "/topics")
+      }
+    });
+  },
+  edit(req, res, next) {
 
-  edit(req, res, next){
+    // #1
+    topicQueries.getTopic(req.params.id, (err, topic) => {
+      if (err || topic == null) {
+        res.redirect(404, "/");
+      } else {
 
-      topicQueries.getTopic(req.params.id, (err, topic) => {
-        if(err || topic == null){
-          res.redirect(404, "/");
+        // #2
+        const authorized = new Authorizer(req.user, topic).edit();
+
+        // #3
+        if (authorized) {
+          res.render("topics/edit", {
+            topic
+          });
         } else {
-
-          const authorized = new Authorizer(req.user, topic).edit();
-
-          if(authorized){
-            res.render("topics/edit", {topic});
-          } else {
-            req.flash("You are not authorized to do that.")
-            res.redirect(`/topics/${req.params.id}`)
-          }
+          req.flash("You are not authorized to do that.")
+          res.redirect(`/topics/${req.params.id}`)
         }
-      });
-    },
+      }
+    });
+  },
+  update(req, res, next) {
 
-    update(req, res, next){
-
-
-      topicQueries.updateTopic(req, req.body, (err, topic) => {
-        if(err || topic == null){
-          res.redirect(401, `/topics/${req.params.id}/edit`);
-        } else {
-          res.redirect(`/topics/${req.params.id}`);
-        }
-      });
-    }
+    // #1
+    topicQueries.updateTopic(req, req.body, (err, topic) => {
+      if (err || topic == null) {
+        res.redirect(401, `/topics/${req.params.id}/edit`);
+      } else {
+        res.redirect(`/topics/${req.params.id}`);
+      }
+    });
+  }
 }

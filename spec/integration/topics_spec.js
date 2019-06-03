@@ -1,26 +1,21 @@
 const request = require("request");
 const server = require("../../src/server");
 const base = "http://localhost:3000/topics/";
-
-const sequelize = require('../../src/db/models/index').sequelize;
+const sequelize = require("../../src/db/models/index").sequelize;
 const Topic = require("../../src/db/models").Topic;
 const User = require("../../src/db/models").User;
-const Post = require("../../src/db/models").Post;
-
 
 describe("routes : topics", () => {
 
-  beforeEach((done) => { // before each context
-    this.topic; // define variables and bind to context
-    sequelize.sync({
-      force: true
-    }).then(() => { // clear database
+  beforeEach((done) => {
+    this.topic;   // define variables and bind to context
+    sequelize.sync({ force: true }).then(() => {  // clear database
       Topic.create({
-          title: "JS Frameworks",
-          description: "There is a lot of them"
-        })
+        title: "JS Frameworks",
+        description: "There is a lot of them"
+      })
         .then((res) => {
-          this.topic = res; // store resulting topic in context
+          this.topic = res;  // store resulting topic in context
           done();
         })
         .catch((err) => {
@@ -30,42 +25,40 @@ describe("routes : topics", () => {
     });
   });
 
-  // context of admin user
   describe("admin user performing CRUD actions for Topic", () => {
 
-    beforeEach((done) => { // before each suite in admin context
+    beforeEach((done) => {
       User.create({
-          email: "admin@example.com",
-          password: "123456",
-          role: "admin"
-        })
+        email: "admin@example.com",
+        password: "123456",
+        role: "admin"
+      })
         .then((user) => {
-          request.get({ // mock authentication
-              url: "http://localhost:3000/auth/fake",
-              form: {
-                role: user.role,
-                userId: user.id,
-                email: user.email
-              }
-            },
+          request.get({
+            url: "http://localhost:3000/auth/fake",
+            form: {
+              role: user.role,
+              userId: user.id,
+              email: user.email
+            }
+          },
             (err, res, body) => {
               done();
-            } // mock authenticate as admin user
+            }
           );
         });
     });
-  });
+
     describe("GET /topics", () => {
 
       it("should respond with all topics", (done) => {
         request.get(base, (err, res, body) => {
           expect(err).toBeNull();
-          expect(body).toContain("Topics");
-          expect(body).toContain("JS Frameworks");
+          expect(body).toContain("topics");
+  
           done();
         });
       });
-    });
 
     });
 
@@ -74,7 +67,8 @@ describe("routes : topics", () => {
       it("should render a view with a new topic form", (done) => {
         request.get(`${base}new`, (err, res, body) => {
           expect(err).toBeNull();
-          expect(body).toContain("New Topic");
+          expect(body).toContain("Bloccit")
+     //     expect(body).toContain("new topic");
           done();
         });
       });
@@ -93,11 +87,7 @@ describe("routes : topics", () => {
       it("should create a new topic and redirect", (done) => {
         request.post(options,
           (err, res, body) => {
-            Topic.findOne({
-                where: {
-                  title: "blink-182 songs"
-                }
-              })
+            Topic.findOne({ where: { title: "blink-182 songs" } })
               .then((topic) => {
                 expect(topic.title).toBe("blink-182 songs");
                 expect(topic.description).toBe("What's your favorite blink-182 song?");
@@ -138,7 +128,7 @@ describe("routes : topics", () => {
               Topic.findAll()
                 .then((topics) => {
                   expect(err).toBeNull();
-                  expect(topics.length).toBe(topicCountBeforeDelete);
+                  expect(topics.length).toBe(topicCountBeforeDelete - 1);
                   done();
                 })
 
@@ -151,7 +141,7 @@ describe("routes : topics", () => {
 
     describe("GET /topics/:id/edit", () => {
 
-      it("should render an edit topic form", (done) => {
+      it("should render a view with an edit topic form", (done) => {
         request.get(`${base}${this.topic.id}/edit`, (err, res, body) => {
           expect(err).toBeNull();
           expect(body).toContain("Edit Topic");
@@ -174,12 +164,10 @@ describe("routes : topics", () => {
         }, (err, res, body) => {
           expect(err).toBeNull();
           Topic.findOne({
-              where: {
-                id: 1
-              }
-            })
+            where: { id: 1 }
+          })
             .then((topic) => {
-              expect(topic.title).toBe("JS Frameworks");
+              expect(topic.title).toBe("JavaScript Frameworks");
               done();
             });
         });
@@ -187,32 +175,39 @@ describe("routes : topics", () => {
 
     });
 
- //end context for admin user
+  });
 
-  // context of member user
   describe("member user performing CRUD actions for Topic", () => {
 
     beforeEach((done) => {
-        request.get({
-          url: "http://localhost:3000/auth/fake",
-          form: {
-            role: "member"
-          }
-        },
-          (err, res, body) => {
-            done();
-          }
-        );
-      });
-  });
+      User.create({
+        email: "member@example.com",
+        password: "123456",
+        role: "member"
+      })
+        .then((user) => {
+          request.get({
+            url: "http://localhost:3000/auth/fake",
+            form: {
+              role: user.role,
+              userId: user.id,
+              email: user.email
+            }
+          },
+            (err, res, body) => {
+              done();
+            }
+          );
+        });
+    });
 
     describe("GET /topics", () => {
 
       it("should respond with all topics", (done) => {
         request.get(base, (err, res, body) => {
           expect(err).toBeNull();
-          expect(body).toContain("Topics");
-          expect(body).toContain("JS Frameworks");
+          expect(body).toContain("topics");
+ 
           done();
         });
       });
@@ -224,7 +219,8 @@ describe("routes : topics", () => {
       it("should redirect to topics view", (done) => {
         request.get(`${base}new`, (err, res, body) => {
           expect(err).toBeNull();
-          expect(body).toContain("Topics");
+          expect(body).toContain("Bloccit");
+          expect(body).toContain("topics");
           done();
         });
       });
@@ -243,11 +239,7 @@ describe("routes : topics", () => {
       it("should not create a new topic", (done) => {
         request.post(options,
           (err, res, body) => {
-            Topic.findOne({
-                where: {
-                  title: "blink-182 songs"
-                }
-              })
+            Topic.findOne({ where: { title: "blink-182 songs" } })
               .then((topic) => {
                 expect(topic).toBeNull(); // no topic should be returned
                 done();
@@ -259,6 +251,7 @@ describe("routes : topics", () => {
           }
         );
       });
+
     });
 
     describe("GET /topics/:id", () => {
@@ -328,10 +321,8 @@ describe("routes : topics", () => {
           (err, res, body) => {
             expect(err).toBeNull();
             Topic.findOne({
-                where: {
-                  id: 1
-                }
-              })
+              where: { id: 1 }
+            })
               .then((topic) => {
                 expect(topic.title).toBe("JS Frameworks"); // confirm title is unchanged
                 done();
@@ -341,4 +332,6 @@ describe("routes : topics", () => {
 
     });
 
+  });
 
+});
